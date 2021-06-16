@@ -1,11 +1,18 @@
 const express = require('express');
 const logger = require('node-color-log');
 const path = require('path');
-const cookieSession = require('cookie-session');
-const bodyParser = require('body-parser');
 const User = require('./classes/User');
 
+// RATE LIMIT MIDDLEWARE: https://www.npmjs.com/package/express-rate-limit
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+});
+
 const app = express();
+
+app.use(limiter);
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
