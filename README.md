@@ -7,15 +7,13 @@ For a brief description of what Authority is (or, truthfully, I hope it to be):
 
 ## Installation
 
- 1. Clone the repository
-	 1a. Make a fork if you plan to contribute.
- 2. Install Node.js 
-	 2a. Make sure to add it to your PATH if operating on Windows. 
+ 1. Clone the repository. Make a fork if you plan to contribute.
+ 2. Install Node.js, and make sure to add it to your PATH if operating on Windows. 
  3. CD into the repository you cloned in Step 1.
  4. Run `npm install`in terminal/command prompt
  5. Wait for packages and dependencies to install.
  6. Look at env_example and make a copy of it.
-	 6a. Rename it .env, replace any necessary values. **Most importantly, set up your SQL connection. Did I mention this is using SQL yet? No? Oops. Stay mad, Mongoists!**
- 7. Set up SQL via scripts under `sql/`. It doesn't matter the order, but execute sql_schema.sql first.
- 8. After setting up your .env file and SQL database, run `npm start`for production, and `npm run dev`for development. 
- 9. There you go! Should work, and you should be all ready to develop (and commit plz I'm lonely)
+ 7. Rename it .env, replace any necessary values. **Most importantly, set up your SQL connection. Did I mention this is using SQL yet? No? Oops. Stay mad, Mongoists!**
+ 8. Set up SQL via scripts under `sql/`. It doesn't matter the order, but execute sql_schema.sql first.
+ 9. After setting up your .env file and SQL database, run `npm start`for production, and `npm run dev`for development. 
+ 10. There you go! Should work, and you should be all ready to develop (and commit plz I'm lonely)
