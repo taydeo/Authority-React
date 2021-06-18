@@ -17,3 +17,4 @@ For a brief description of what Authority is (or, truthfully, I hope it to be):
  8. Set up SQL via scripts under `sql/`. It doesn't matter the order, but execute sql_schema.sql first.
  9. After setting up your .env file and SQL database, run `npm start`for production, and `npm run dev`for development. 
  10. There you go! Should work, and you should be all ready to develop (and commit plz I'm lonely)
+ 11. If you want working image upload, you will have to create a firebase bucket and put the details in a file called firebaseConfig.json.
