@@ -25,7 +25,9 @@ function LoggedInNavBar(props){
                     <LinkContainer to={"/politician/"+userData.id}>
                         <a className="dropdown-item" href="#">Profile</a>
                     </LinkContainer>
-                    <a className="dropdown-item" href="/editprofile">Edit Profile</a>
+                    <LinkContainer to={"/editprofile"}>
+                        <a className="dropdown-item" href="#">Edit Profile</a>
+                    </LinkContainer>
                     <a className="dropdown-item" href="#" onClick={logout}>Logout</a>
                 </ul>
             </li>

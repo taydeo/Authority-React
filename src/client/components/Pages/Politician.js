@@ -9,6 +9,7 @@ import '../../css/profile.css';
 import ClipLoader from "react-spinners/ClipLoader";
 import { LinkContainer } from 'react-router-bootstrap'
 import { UserContext } from '../../context/UserContext'
+import { getPositionName, selectColor } from '../../../server/classes/Misc/Methods'
 
 function Politician(props){
     var [politicianInfo, setPoliticianInfo] = useState({});
@@ -30,7 +31,7 @@ function Politician(props){
                 }
             }
             else{            
-                requestedUserInfo = await AuthorizationService.getUserData(userId);
+                requestedUserInfo = await AuthorizationService.getUserData(userId,true,true);
                 userExists = !(requestedUserInfo == undefined || requestedUserInfo == "404")
             }
             if(!userExists){
@@ -61,7 +62,7 @@ function Politician(props){
             <h2>{politicianInfo.politicianName}</h2>
             <div className="mainProfileContainer">
 
-                <img className="profilePicture" src={"https://www.europeanperil.com/authority/"+politicianInfo.profilePic} alt="Profile Picture"/>
+                <img className="profilePicture" src={politicianInfo.profilePic} alt="Profile Picture"/>
 
                 {
                 (!loggedInUserIsUser) ? (
@@ -103,12 +104,34 @@ function Politician(props){
                             </LinkContainer>
                         </td>
                     </tr>
-                    ):(<></>)}  
+                    ):(<></>)}
                     <tr>
-                        
+                        <td>Region</td>    
+                        <td>
+                            <LinkContainer to={`/state/${politicianInfo.stateInfo.name}`}>
+                                <a href='#'>{politicianInfo.stateInfo.name}</a>
+                            </LinkContainer>
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td>Economic Positions</td>
+                        <td>
+                        <span style={{color:selectColor(['blue','#101010','red'], politicianInfo.ecoPos)}}>
+                            {getPositionName("economic",politicianInfo.ecoPos)} ({politicianInfo.ecoPos})
+                        </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Social Positions</td>
+                        <td>
+                        <span style={{color:selectColor(['blue','#101010','red'], politicianInfo.socPos)}}>
+                            {getPositionName("social",politicianInfo.socPos)} ({politicianInfo.socPos})
+                        </span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+            <br/>
             </>
             ) : (<><br/><ClipLoader/></>)}
         </Body>

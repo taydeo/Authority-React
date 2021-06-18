@@ -89,6 +89,22 @@ router.post("/register", async function(req, res) {
 
 });
 
+router.post("/setUserImage",function(req,res){
+    if(req.session.playerData){
+        if(req.session.playerData.loggedIn){
+            var db = require('../../db');
+            var sql = `UPDATE users SET profilePic=${db.escape(req.body.pictureUrl)} WHERE id=${req.session.playerData.loggedInId}`;
+            db.query(sql, function(err,response){
+                if(err) throw err;
+                else{
+                    res.sendStatus(200);
+                }
+            })
+
+        }
+    }
+
+})
 
 
 

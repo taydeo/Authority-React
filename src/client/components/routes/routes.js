@@ -9,6 +9,7 @@ import Register from '../Pages/Register';
 import Login from '../Pages/Login';
 import Politician from '../Pages/Politician';
 import NotFound from '../Pages/NotFound';
+import EditProfile from '../Pages/EditProfile';
 
 class Routes extends Component{
     render(){
@@ -28,6 +29,9 @@ class Routes extends Component{
                 </Route>
                 <Route path="/politician/:userId">
                     <Politician/>
+                </Route>
+                <Route path="/editprofile">
+                    <EditProfile/>
                 </Route>
             </>
         );
