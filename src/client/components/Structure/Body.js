@@ -17,6 +17,7 @@ export default function Body(props){
     let isLoggedIn = useContext(UserContext).sessionData[0].loggedIn;
     return(
         <>
+                
                 <NavBar/>  
                 <div className="main">
                     <div className="gameContainer">

@@ -6,8 +6,8 @@ const User = require('./classes/User');
 // RATE LIMIT MIDDLEWARE: https://www.npmjs.com/package/express-rate-limit
 const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 200 // limit each IP to 100 requests per windowMs
 });
 
 const app = express();

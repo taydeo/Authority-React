@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Body from '../Structure/Body';
 import AuthorizationService from '../../service/AuthService';
 import { UserContext } from '../../context/UserContext';
@@ -8,8 +8,17 @@ import { withRouter } from 'react-router';
 function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const setSessionData = useContext(UserContext).sessionData[1];
-    const setPlayerData = useContext(UserContext).playerData[1];
+    const context = useContext(UserContext);
+    const sessionData = context.sessionData[0];
+    const setSessionData = context.sessionData[1];
+    const setPlayerData = context.playerData[1];
+
+
+    useEffect(()=>{
+        if(sessionData.loggedIn){
+            props.history.push('/politician/'+sessionData.loggedInId);
+        }
+    })
 
     var login = async function(){
         var body = {"username":username, "password":password};
@@ -20,7 +29,10 @@ function Login(props) {
             setPlayerData(loggedInData);
             props.history.push('/politician/'+loggedInData.id);
         }
-        console.log(response);
+        else{
+            let setAlert = context.alert[1];
+            setAlert("Incorrect details uwu");
+        }
     }
 
     return (

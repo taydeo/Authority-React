@@ -8,12 +8,14 @@ import { timeAgoString } from '../../../server/classes/User/Method'
 import '../../css/profile.css';
 import ClipLoader from "react-spinners/ClipLoader";
 import { LinkContainer } from 'react-router-bootstrap'
+import { UserContext } from '../../context/UserContext'
 
 function Politician(props){
     var [politicianInfo, setPoliticianInfo] = useState({});
     var [loggedInUserIsUser, setLoggedInUserIsUser] = useState(false);
     var [loading, setLoading] = useState(true);
     var { userId } = useParams();
+    var setAlert = useContext(UserContext).alert[1];
     
 
     useEffect(()=>{
@@ -32,8 +34,14 @@ function Politician(props){
                 userExists = !(requestedUserInfo == undefined || requestedUserInfo == "404")
             }
             if(!userExists){
-                if(sessionData.loggedIn){ props.history.push(`/politician`); }
-                else{ props.history.push(`/`) };
+                if(sessionData.loggedIn){ 
+                    props.history.push(`/politician`); 
+                    setAlert("Politician not found.");
+                }
+                else{ 
+                    props.history.push(`/`) 
+                    setAlert("Politician not found.");
+                };
             }
             else{
                 setPoliticianInfo(requestedUserInfo);

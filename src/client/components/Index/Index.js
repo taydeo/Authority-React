@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React,{ useEffect, useContext } from 'react';
 import { Button, h1 } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
@@ -6,26 +6,32 @@ import Body from '../Structure/Body';
 
 import GameLogo from '../../css/images/AuthorityLogoV3.png'; 
 
-export default class Index extends Component{
+import { UserContext } from '../../context/UserContext';
 
-    componentDidMount(){
-        document.title = "AUTHORITY | Index"
-    }
-    render(){
-        return(
-            <Body>
-                <br/>
-                <img src={GameLogo} style={{width:"50vh"}} alt="AuthorityLogo"/>
-                <h1>Authority 3.0</h1>
+export default function Index(props){
+    const context = useContext(UserContext);
+    const sessionData = context.sessionData[0];
 
-                <p>
-                    Authority is a WIP political game in which users can register as a politician, run for offices,
-                    run countries, play a vital part in the economic system within their countries (and others), and
-                    seize power through a variety of methods--legal, or illegal.
-                </p>
-            
-                <hr/>
+    useEffect(()=>{
+        document.title = "AUTHORITY | INDEX";
+    })
 
+    return(
+        <Body>
+            <br/>
+            <img src={GameLogo} style={{width:"50vh"}} alt="AuthorityLogo"/>
+            <h1>Authority 3.0</h1>
+
+            <p>
+                Authority is a WIP political game in which users can register as a politician, run for offices,
+                run countries, play a vital part in the economic system within their countries (and others), and
+                seize power through a variety of methods--legal, or illegal.
+            </p>
+        
+            <hr/>
+
+            {(sessionData.loggedIn) ? (<></>) : (
+            <>
                 <LinkContainer to='/register'>
                     <Button size="lg" active>Register Now!</Button>
                 </LinkContainer>
@@ -35,8 +41,10 @@ export default class Index extends Component{
                 <br/>
                 <p>Already have an account? <Link to='/login'>Login Here</Link></p>
                 <hr/>
-            </Body>
-        )
-    }
+            </>
+            )}
 
+
+        </Body>
+    )
 }

@@ -7,6 +7,7 @@ import Loading from '../components/Misc/Loading';
 export default function ContextProvider(props){
     const [sessionData, setSessionData] = useState({});
     const [playerData, setPlayerData] = useState({});
+    const [alert, setAlert] = useState(null);
     const [loading, setLoading] = useState(true);
 
 
@@ -46,7 +47,8 @@ export default function ContextProvider(props){
         <UserContext.Provider value={
             { 
                 sessionData: [sessionData, setSessionData],
-                playerData: [playerData, setPlayerData]
+                playerData: [playerData, setPlayerData],
+                alert: [alert, setAlert]
             }}>
             {props.children}
         </UserContext.Provider>
