@@ -20,7 +20,7 @@ function EditProfile(props){
         var storageRef=storage.ref();
 
         // Upload new.
-        var uploadTask=storageRef.child(`userPics/${sessionData[0].loggedInId}`).put(file, {'cacheControl':'public,max-age=86400'});
+        var uploadTask=storageRef.child(`userPics/${sessionData.loggedInId}`).put(file, {'cacheControl':'public,max-age=86400'});
         var url = await uploadTask.snapshot.ref.getDownloadURL()
         .then(async (url)=>{
             var response = await AuthorizationService.updateUserPictureURL(url);
