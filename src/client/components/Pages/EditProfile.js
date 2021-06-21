@@ -6,9 +6,7 @@ import firebase from '../../firebase/firebase';
 import AuthorizationService from '../../service/AuthService';
 
 function EditProfile(props){
-    const context = useContext(UserContext);
-    const setAlert = context.alert[1];
-    const sessionData = context.sessionData;
+    const { setAlert, sessionData } = useContext(UserContext);
 
     const [selectedFile, setSelectedFile] = useState(null);
     const onImageChange = function(e){
@@ -34,7 +32,7 @@ function EditProfile(props){
     }
 
     useEffect(()=>{
-        if(!context.sessionData[0].loggedIn){
+        if(!sessionData.loggedIn){
             props.history.push("/");
             setAlert("Not logged in.");
         }
