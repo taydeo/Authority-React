@@ -8,11 +8,7 @@ import { withRouter } from 'react-router';
 function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const context = useContext(UserContext);
-    const sessionData = context.sessionData[0];
-    const setSessionData = context.sessionData[1];
-    const setPlayerData = context.playerData[1];
-
+    const { sessionData, setSessionData, setPlayerData, setAlert } = useContext(UserContext);
 
     useEffect(()=>{
         if(sessionData.loggedIn){
@@ -30,7 +26,6 @@ function Login(props) {
             props.history.push('/politician/'+loggedInData.id);
         }
         else{
-            let setAlert = context.alert[1];
             setAlert("Incorrect details uwu");
         }
     }

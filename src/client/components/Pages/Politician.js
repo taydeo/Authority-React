@@ -16,7 +16,7 @@ function Politician(props){
     var [loggedInUserIsUser, setLoggedInUserIsUser] = useState(false);
     var [loading, setLoading] = useState(true);
     var { userId } = useParams();
-    var setAlert = useContext(UserContext).alert[1];
+    var { setAlert } = useContext(UserContext);
     
 
     useEffect(()=>{
@@ -26,7 +26,7 @@ function Politician(props){
             var sessionData = await AuthorizationService.getSessionData();
             if(props.noRequestId){
                 if(sessionData.loggedIn){
-                    requestedUserInfo = await AuthorizationService.getUserData(sessionData.loggedInId);
+                    requestedUserInfo = await AuthorizationService.getUserData(sessionData.loggedInId,true,true);
                     userExists = !(requestedUserInfo == undefined)
                 }
             }

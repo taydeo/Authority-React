@@ -1,13 +1,19 @@
 import React, { useContext } from 'react';
-
+import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import LoggedInNavBar from './NavBar/loggedInNavBar';
-
+import { userHasPerm } from '../../../server/classes/Party/Methods';
+import AuthorizationService from '../../service/AuthService';
+import { LinkContainer } from 'react-router-bootstrap';
 import { UserContext } from '../../context/UserContext.js';
 
-export default function NavBar(props) {
-    const userContextData = useContext(UserContext);
-    const sessionData = userContextData.sessionData[0];
+function NavBar(props) {
+    const { sessionData, setSessionData, playerData } = useContext(UserContext);
+
+    const logout = function(){
+        var newSessionData = AuthorizationService.logout();
+        setSessionData(newSessionData);
+        props.history.push("/");
+    }
 
     return (
         <>
@@ -19,7 +25,54 @@ export default function NavBar(props) {
                     <div className="collapse navbar-collapse" id="myNavbar">
                         <ul className="nav navbar-nav navbar-right">
                             {(sessionData.loggedIn) ? (
-                                <LoggedInNavBar/>
+                                <>
+                                <li className="dropdown">
+                                    <a className="nav-link dropdown-toggle" id="navBarDrop" role="button" data-toggle="dropdown" aria-expanded="false">
+                                        <i className="fas fa-user" aria-hidden="true"></i> {playerData.politicianName}
+                                    </a>
+                                    <ul className="dropdown-menu">
+                                        <LinkContainer to={"/politician/"+playerData.id}>
+                                            <a className="dropdown-item" href="#">Profile</a>
+                                        </LinkContainer>
+                                        <LinkContainer to={"/editprofile"}>
+                                            <a className="dropdown-item" href="#">Edit Profile</a>
+                                        </LinkContainer>
+                                        <a className="dropdown-item" href="#" onClick={logout}>Logout</a>
+                                    </ul>
+                                </li>
+                                <li className="dropdown">
+                                    <a className="nav-link dropdown-toggle" id="navBarDrop" role="button" data-toggle="dropdown" aria-expanded="false">
+                                        <i className="fas fa-flag" aria-hidden="true"></i> {playerData.nation}
+                                    </a>
+                                    <ul className="dropdown-menu">
+                                        <a className="dropdown-item" href={"/politicalparties/"+playerData.nation}>Political Parties</a>
+                                    </ul>
+                                </li>
+                                {(playerData?.partyInfo) ? (
+                                    <li className="dropdown">
+                                        <a className="nav-link dropdown-toggle" id="navBarDrop" role="button" data-toggle="dropdown" aria-expanded="false">
+                                            <i className="fas fa-handshake" aria-hidden="true"></i> {playerData.partyInfo.name}
+                                        </a>
+                                        <ul className="dropdown-menu">
+                                            <a className="dropdown-item" href={"party/"+playerData.partyInfo.id+"/overview"}>Overview</a>
+                                            <a className="dropdown-item" href={"party/"+playerData.partyInfo.id+"/members"}>Members</a>
+                                            {
+                                            (
+                                                userHasPerm(playerData.id,playerData.partyInfo,"sendFunds") || 
+                                                userHasPerm(playerData.id,playerData.partyInfo,"fundingReq")
+                                            ) ? (<a className="dropdown-item" href={"party/"+playerData.partyInfo.id+"/partyTreasury"}>Party Treasury</a>) : (<></>)
+                                            }
+                                            {
+                                            (
+                                                userHasPerm(playerData.id,playerData.partyInfo,"leader")
+                                            ) ? (<a className="dropdown-item" href={"party/"+playerData.partyInfo.id+"/partyControls"}>Party Management</a>) : (<></>)
+                                        }
+                                        </ul>
+                                    </li>
+                                ) : (
+                                    <></>
+                                )}
+                            </>
                             ) : (
                                 <Link to='/login' className="nav-link">
                                     LOGIN
@@ -32,3 +85,4 @@ export default function NavBar(props) {
         </>
         );
 }
+export default withRouter(NavBar);

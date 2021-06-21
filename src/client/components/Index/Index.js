@@ -9,8 +9,7 @@ import GameLogo from '../../css/images/AuthorityLogoV3.png';
 import { UserContext } from '../../context/UserContext';
 
 export default function Index(props){
-    const context = useContext(UserContext);
-    const sessionData = context.sessionData[0];
+    const { sessionData } = useContext(UserContext);
 
     useEffect(()=>{
         document.title = "AUTHORITY | INDEX";

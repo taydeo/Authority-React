@@ -14,7 +14,10 @@ export default function Body(props){
     if (props.middleColWidth) {
         middleColWidth = props.middleColWidth;
     }
-    let isLoggedIn = useContext(UserContext).sessionData[0].loggedIn;
+
+    let { sessionData } = useContext(UserContext);
+    let isLoggedIn = sessionData.loggedIn;
+
     return(
         <>
                 

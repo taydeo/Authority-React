@@ -22,7 +22,9 @@ export default function ContextProvider(props){
                 }
             
                 setSessionData(sessionDataX);
-                setLoading(false);
+                if(loading){
+                    setLoading(false);
+                }
             }
             catch(error){
                 console.log(error);
@@ -30,7 +32,7 @@ export default function ContextProvider(props){
         };
         const id = setInterval(()=>{
             fetchData();
-        }, 5000);
+        }, 10000);
 
         fetchData();
 
@@ -46,9 +48,12 @@ export default function ContextProvider(props){
         ) : (
         <UserContext.Provider value={
             { 
-                sessionData: [sessionData, setSessionData],
-                playerData: [playerData, setPlayerData],
-                alert: [alert, setAlert]
+                sessionData,
+                setSessionData,
+                playerData,
+                setPlayerData,
+                alert,
+                setAlert
             }}>
             {props.children}
         </UserContext.Provider>

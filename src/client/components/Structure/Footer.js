@@ -3,8 +3,7 @@ import { UserContext } from '../../context/UserContext';
 import NumberFormat from 'react-number-format';
 
 export default function Footer(props) {
-    const context = useContext(UserContext);
-    const playerData = context.playerData[0];
+    const { playerData } = useContext(UserContext);
 
     return (
         <div className="footerInformation">

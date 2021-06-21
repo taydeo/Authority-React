@@ -14,7 +14,7 @@ router.get("/logout", function (req, res) {
     req.session.playerData.loggedIn = false;
     req.session.playerData.loggedInId = 0;
 
-    res.send(req.session.playerData);
+    res.send(req.session);
 })
 
 router.post("/login", function (req, res) {

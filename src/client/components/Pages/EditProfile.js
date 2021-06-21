@@ -21,16 +21,8 @@ function EditProfile(props){
         var storage=firebase.storage();
         var storageRef=storage.ref();
 
-        // // Delete first.
-        // var oldImageRef = storageRef.child(`userPics/${sessionData[0].loggedInId}`);
-        // oldImageRef.delete().then(function(){
-        //     console.log("Old image deleted.");
-        // }).catch(function(error){ 
-        //     console.log("Doesn't exist lol. Ignoring. ")
-        // });
-        
         // Upload new.
-        var uploadTask=storageRef.child(`userPics/${sessionData[0].loggedInId}`).put(file);
+        var uploadTask=storageRef.child(`userPics/${sessionData[0].loggedInId}`).put(file, {'cacheControl':'public,max-age=86400'});
         var url = await uploadTask.snapshot.ref.getDownloadURL()
         .then(async (url)=>{
             var response = await AuthorizationService.updateUserPictureURL(url);

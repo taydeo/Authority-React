@@ -8,15 +8,13 @@ import { useAlert } from 'react-alert';
 
 
 export default function App(props){
+  const { alert, setAlert } = useContext(UserContext);
 
-  const AlertContext = useContext(UserContext);
-  const Alert = AlertContext.alert[0];
   const alertDialog = useAlert()
 
   useEffect(()=>{
-    if(Alert != null){
-      alertDialog.show(Alert);
-      let setAlert = AlertContext.alert[1];
+    if(alert != null){
+      alertDialog.show(alert);
       setAlert(null);
     }
 
