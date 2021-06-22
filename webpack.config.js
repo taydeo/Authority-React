@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CompressionPlugin = require("compression-webpack-plugin");
+
 
 const outputDirectory = 'dist';
 
@@ -58,7 +60,8 @@ module.exports = {
       inject:true,
       template: './public/index.html',
       favicon: './public/favicon.ico'
-    })
+    }),
+    new CompressionPlugin(),
   ],
   optimization: {
     splitChunks: {
