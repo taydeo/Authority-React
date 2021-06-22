@@ -17,10 +17,18 @@ export default function ContextProvider(props){
                 const sessionDataX = await AuthorizationService.getSessionData();
         
                 if(sessionDataX.loggedIn){
-                    const playerDataX = await AuthorizationService.getLoggedInData();
-                    setPlayerData(playerDataX);
+                    var playerDataX = await AuthorizationService.getLoggedInData();
+                    if(playerDataX.error){
+                        setPlayerData({});
+                    }
+                    else{
+                        setPlayerData(playerDataX);
+                    }
                 }
-            
+                
+                if(sessionDataX.loggedIn && playerDataX.error){
+                    setSessionData(await AuthorizationService.logout());
+                }
                 setSessionData(sessionDataX);
                 if(loading){
                     setLoading(false);

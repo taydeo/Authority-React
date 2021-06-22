@@ -9,8 +9,7 @@ import { UserContext } from '../../context/UserContext';
 
 function Register(props) {
     // SET SESSION DATA
-    var setSessionData = useContext(UserContext).sessionData[1];
-    var setPlayerData = useContext(UserContext).playerData[1];
+    var { setSessionData, setPlayerData } = useContext(UserContext)
 
     // FORM DATA
     const [username, setUsername] = useState(null);

@@ -2,13 +2,9 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcryptjs');
 var User = require('../../classes/User');
-
-const setSessionDefaults = function (req) {
-    req.session.playerData = {};
-    req.session.playerData.cookieID = Math.floor(Math.random() * 1000000000)
-    req.session.playerData.loggedIn = false;
-    req.session.playerData.loggedInId = 0;
-}
+const setSessionDefaults = require('../../classes/Misc/setSessionDefaults');
+const { setSessionAuthorized } = require('../../classes/Misc/setSessionDefaults');
+const requestIP = require('request-ip');
 
 router.get("/logout", function (req, res) {
     req.session.playerData.loggedIn = false;
@@ -31,16 +27,7 @@ router.post("/login", function (req, res) {
             // If the username they've provided exists and if the password matches.
             if (result.length == 1 && bcrypt.compareSync(providedPassword, result[0].password)) {
                 // Now we change the session data.
-                if (req.session.playerData == null || !req.session.playerData.loggedIn) {
-                    req.session.cookieID = Math.floor(Math.random() * 1000000000)
-                    req.session.playerData = {};
-                    req.session.playerData.loggedIn = true;
-                    req.session.playerData.loggedInId = result[0].id;
-                    req.session.playerData.admin = 0;
-                }
-                if (result[0].admin == 1) {
-                    req.session.playerData.admin = 1;
-                }
+                setSessionAuthorized(req, result[0]);
                 res.send(req.session.playerData);
             }
             else {
@@ -52,7 +39,8 @@ router.post("/login", function (req, res) {
 
 
 router.post("/register", async function(req, res) {
-    let ip = req.socket.remoteAddress
+    var ip = requestIP.getClientIp(req);
+
     var cookieID;
     if (req.session.playerData == null) {
         setSessionDefaults(req);
@@ -72,7 +60,7 @@ router.post("/register", async function(req, res) {
         (username, password, regCookie, currentCookie, 
         regIP, currentIP, politicianName, lastOnline, state, 
         nation, ecoPos, socPos) 
-        VALUES (${db.escape(username)},${db.escape(hash)},${cookieID},${cookieID},'${ip}','${ip}',
+        VALUES (${db.escape(username)},${db.escape(hash)},'${cookieID}','${cookieID}','${ip}','${ip}',
         ${db.escape(politicianName)},${Date.now()},${db.escape(state)},${db.escape(country)},${db.escape(ecoPos)},${db.escape(socPos)})`
 
         db.query(sql,function(err,result){

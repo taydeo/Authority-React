@@ -7,7 +7,7 @@ class State{
     async fetchStateInfo(){
         var abbreviation = this.abbreviation;
         let database = require('../../db');
-        const sql = "SELECT * FROM states WHERE abbreviation = " + database.escape(abbreviation);
+        const sql = `SELECT * FROM states WHERE abbreviation = ${database.escape(abbreviation)} OR name = ${database.escape(abbreviation)}`;
         return new Promise(function(resolve, reject){
             database.query(
                 sql,

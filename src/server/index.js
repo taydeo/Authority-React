@@ -2,6 +2,8 @@ const express = require('express');
 const logger = require('node-color-log');
 const path = require('path');
 const User = require('./classes/User');
+const { setSessionDefaults } = require('./classes/Misc/setSessionDefaults');
+
 
 // RATE LIMIT MIDDLEWARE: https://www.npmjs.com/package/express-rate-limit
 const rateLimit = require('express-rate-limit');
@@ -11,7 +13,6 @@ const limiter = rateLimit({
 });
 
 const app = express();
-
 app.use(limiter);
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -27,13 +28,6 @@ catch(exception){
     return;
 }
 
-// Default session variables.
-const setSessionDefaults = function(req){
-    req.session.playerData = {};
-    req.session.playerData.cookieID = Math.floor(Math.random()*1000000000)
-    req.session.playerData.loggedIn = false;
-    req.session.playerData.loggedInId = 0;
-}
 const logOut = function(req) { req.session.playerData.loggedIn = false; req.session.playerData.loggedInId = 0; }
 
 app.get("/api/init",(req,res)=>{

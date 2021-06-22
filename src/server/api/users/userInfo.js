@@ -48,7 +48,7 @@ router.get('/getLoggedInUser/:fetchParty?/:fetchState?/:sensitive?', async funct
             res.send(userInfo);
         }
         else{
-            res.sendStatus({error:"User does not exist. Invalidating session data."});
+            res.send({error:"User does not exist. Invalidating session data."});
             req.session.playerData.loggedIn = false;
             req.session.playerData.loggedInId = 0;
             req.session.playerData.cookie = 0;
