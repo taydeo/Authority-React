@@ -55,9 +55,20 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin([outputDirectory]),
     new HtmlWebpackPlugin({
-      inject:false,
+      inject:true,
       template: './public/index.html',
       favicon: './public/favicon.ico'
     })
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/, ///< put all used node_modules modules in this chunk
+          name: "vendor", ///< name of bundle
+          chunks: "all" ///< type of code to put in this bundle
+        }
+      }
+    }
+  }
 };
