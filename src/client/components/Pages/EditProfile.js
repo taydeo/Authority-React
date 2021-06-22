@@ -4,11 +4,16 @@ import { UserContext } from '../../context/UserContext'
 import Body from '../Structure/Body';
 import firebase from '../../firebase/firebase';
 import AuthorizationService from '../../service/AuthService';
+import MDEditor from '@uiw/react-md-editor';
+
+import '../../css/profile.css';
 
 function EditProfile(props){
-    const { setAlert, sessionData } = useContext(UserContext);
-
+    const { setAlert, sessionData, playerData } = useContext(UserContext);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [bioText, setBioText] = useState(`${playerData.bio}`);
+
+
     const onImageChange = function(e){
         if(e.target.files[0]){
             setSelectedFile(e.target.files[0]);
@@ -28,7 +33,13 @@ function EditProfile(props){
                 setAlert("Image successfully uploaded!");
             }
         });
+    }
 
+    const onBioSubmit = async function(){
+        var response = AuthorizationService.updateUserBio(bioText);
+        if(response == "OK"){
+            setAlert("Biography successfully changed!");
+        }
     }
 
     useEffect(()=>{
@@ -67,6 +78,16 @@ function EditProfile(props){
                     </tr>
                 </tbody>
             </table>
+            <hr/>
+            <h4>Change Bio</h4>
+            <hr/>
+            <MDEditor
+                value={playerData.bio}
+                onChange={setBioText}
+            />
+            <br/>
+            <button onClick={onBioSubmit} className='btn btn-primary'>Change Biography</button>
+
         </Body>
     )
 }

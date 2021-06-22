@@ -36,3 +36,14 @@
     font-weight: bold;
     font-size:14px;
 }
+.wmde-markdown p{
+    margin-bottom:0px !important;
+    line-height:20px;
+}
+.wmde-markdown blockquote{
+    margin-bottom:0px !important;
+    line-height:12px
+}
+.wmde-markdown hr{
+    margin:0px !important;
+}

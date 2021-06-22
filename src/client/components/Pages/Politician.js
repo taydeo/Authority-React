@@ -10,6 +10,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { LinkContainer } from 'react-router-bootstrap'
 import { UserContext } from '../../context/UserContext'
 import { getPositionName, selectColor } from '../../../server/classes/Misc/Methods'
+import renderHTML from 'react-render-html';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 function Politician(props){
     var [politicianInfo, setPoliticianInfo] = useState({});
@@ -72,9 +74,11 @@ function Politician(props){
                 }
 
                 <hr/>
-
-                <pre className="bioBox">
-                    {politicianInfo.bio}
+                <h4>Biography and Details</h4>
+                <pre className="bioBox" style={{padding:'10px',maxHeight:"25vh",overflow:"auto",backgroundColor:'rgba(240,240,240,0.77)'}}>
+                    <MarkdownPreview
+                    style={{margin:'3px',fontFamily:"Bahnschrift"}}
+                    source={politicianInfo.bio}/>
                 </pre>
 
                 <hr/>
@@ -109,7 +113,10 @@ function Politician(props){
                         <td>Region</td>    
                         <td>
                             <LinkContainer to={`/state/${politicianInfo.stateInfo.name}`}>
-                                <a href='#'>{politicianInfo.stateInfo.name}</a>
+                                <a href='#'>
+                                    <img className='profileStateFlag' src={politicianInfo.stateInfo.flag}/>
+                                    {politicianInfo.stateInfo.name}
+                                </a>
                             </LinkContainer>
                         </td>
                     </tr>  
@@ -117,7 +124,7 @@ function Politician(props){
                         <td>Economic Positions</td>
                         <td>
                         <span style={{color:selectColor(['blue','#101010','red'], politicianInfo.ecoPos)}}>
-                            {getPositionName("economic",politicianInfo.ecoPos)} ({politicianInfo.ecoPos})
+                            {renderHTML(getPositionName("economic",politicianInfo.ecoPos))} ({politicianInfo.ecoPos})
                         </span>
                         </td>
                     </tr>
@@ -125,7 +132,7 @@ function Politician(props){
                         <td>Social Positions</td>
                         <td>
                         <span style={{color:selectColor(['blue','#101010','red'], politicianInfo.socPos)}}>
-                            {getPositionName("social",politicianInfo.socPos)} ({politicianInfo.socPos})
+                            {renderHTML(getPositionName("social",politicianInfo.socPos))} ({politicianInfo.socPos})
                         </span>
                         </td>
                     </tr>

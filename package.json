@@ -14,6 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@uiw/react-markdown-preview": "^3.1.1",
+    "@uiw/react-md-editor": "^3.3.7",
     "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^5.0.1",
@@ -45,6 +47,7 @@
     "react-dom": "^16.5.2",
     "react-google-recaptcha": "^2.1.0",
     "react-number-format": "^4.6.3",
+    "react-render-html": "^0.6.0",
     "react-router": "^5.2.0",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.2.0",

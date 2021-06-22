@@ -91,8 +91,25 @@ router.post("/setUserImage",function(req,res){
 
         }
     }
-
 })
+
+router.post("/setUserBio",function(req,res){
+    if(req.session.playerData){
+        if(req.session.playerData.loggedIn){
+            if(req.body.bio.length < 1000){
+                let newBio = req.body.bio.replace(/\n{3,}/g, '\n');
+                let db = require('../../db');
+                var sql = `UPDATE users SET bio=${db.escape(newBio)} WHERE id=${req.session.playerData.loggedInId}`;
+                db.query(sql, function(err,response){
+                    if(err) throw err;
+                    else{
+                        res.sendStatus(200);
+                    }
+                });    
+            }         
+        }
+    }
+});
 
 
 

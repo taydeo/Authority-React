@@ -9,7 +9,7 @@ import { UserContext } from '../../context/UserContext';
 
 function Register(props) {
     // SET SESSION DATA
-    var { setSessionData, setPlayerData } = useContext(UserContext)
+    var { setSessionData, setPlayerData, setAlert } = useContext(UserContext)
 
     // FORM DATA
     const [username, setUsername] = useState(null);
@@ -49,7 +49,12 @@ function Register(props) {
                 socPos: selectedSocPosition
             }
             var sessionData = await AuthorizationService.register(body);
-            if(sessionData.loggedIn){
+            if(sessionData.error){
+                if(sessionData.error == "Politician already exists!"){
+                    setAlert("Politician already exists!");
+                }
+            }
+            else if(sessionData.loggedIn){
                 setSessionData(sessionData);
                 let newPlayerData = await AuthorizationService.getLoggedInData();
                 setPlayerData(newPlayerData);

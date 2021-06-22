@@ -46,6 +46,10 @@ class AuthService{
         return this.auth.post('auth/setUserImage',{pictureUrl:url})
             .then(response=>response.data);
     }
+    updateUserBio(bio){
+        return this.auth.post('auth/setUserBio',{bio})
+            .then(response=>response.data);
+    }
 }
 
 const AuthorizationService = new AuthService();
