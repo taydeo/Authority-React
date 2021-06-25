@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import axios from 'axios';
 
 import Routes from './components/routes/routes.js';
 import { AlertContext } from './context/AlertContext'

@@ -18,6 +18,7 @@ function Politician(props){
     var [loggedInUserIsUser, setLoggedInUserIsUser] = useState(false);
     var [loading, setLoading] = useState(true);
     var { userId } = useParams();
+
     var { setAlert } = useContext(AlertContext);
     
 
@@ -54,7 +55,7 @@ function Politician(props){
             }
         }
         fetchData();
-    },[])
+    },[props.match.params.userId])
     return(
         <Body middleColWidth='7'>
             {(!loading) ? (

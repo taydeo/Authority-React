@@ -1,20 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { Route } from 'react-router-dom';
 
 /** 
  * Import all page components here.
  */
-import Index from '../Index/Index';
-import Register from '../Pages/Register';
-import Login from '../Pages/Login';
+const Index = lazy(() => import('../Index/Index'));
+const Register = lazy(() => import('../Pages/Register'));
+const Login = lazy(() => import('../Pages/Login'));
+const EditProfile = lazy(() => import('../Pages/EditProfile'));
+import Loading from '../Misc/Loading';
 import Politician from '../Pages/Politician';
-import NotFound from '../Pages/NotFound';
-import EditProfile from '../Pages/EditProfile';
 
 class Routes extends Component{
     render(){
         return(
             <>
+            <Suspense fallback={<Loading/>}>
                 <Route exact path="/">
                     <Index/>
                 </Route>
@@ -24,15 +25,16 @@ class Routes extends Component{
                 <Route exact path="/login">
                     <Login/>
                 </Route>
-                <Route exact path="/politician">
-                    <Politician noRequestId={true}/>
-                </Route>
-                <Route path="/politician/:userId">
-                    <Politician/>
-                </Route>
                 <Route path="/editprofile">
                     <EditProfile/>
                 </Route>
+            </Suspense>
+            <Route exact path="/politician">
+                    <Politician noRequestId={true}/>
+            </Route>
+            <Route path="/politician/:userId">
+                <Politician/>
+            </Route>
             </>
         );
     }

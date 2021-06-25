@@ -33,8 +33,8 @@ function EditProfile(props){
             console.log(url);
             var response = await AuthorizationService.updateUserPictureURL(url);
             if(response == "OK"){
-                setAlertType("success")
                 setAlert("Image successfully uploaded!");
+                setAlertType("success")
             }
         });
     }
@@ -42,8 +42,8 @@ function EditProfile(props){
     const onBioSubmit = async function(){
         var response = await AuthorizationService.updateUserBio(bioText);
         if(response == "OK"){
-            setAlertType("success")
             setAlert("Biography successfully changed!");
+            setAlertType("success")
         }
     }
 

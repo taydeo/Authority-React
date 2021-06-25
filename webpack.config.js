@@ -2,12 +2,16 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
-
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const outputDirectory = 'dist';
 
 module.exports = {
-  entry: ['babel-polyfill', './src/client/index.js'],
+  mode:"production",
+  entry:{
+    main:['babel-polyfill','./src/client/index.js']
+  },
   output: {
     publicPath:"/",
     path: path.join(__dirname, outputDirectory),
@@ -62,16 +66,37 @@ module.exports = {
       favicon: './public/favicon.ico'
     }),
     new CompressionPlugin(),
+    //new BundleAnalyzerPlugin()
   ],
-  optimization: {
+  optimization: { 
+    runtimeChunk: 'single',
     splitChunks: {
       cacheGroups: {
-        vendors: {
-          test: /[\\/]node_modules[\\/]/, ///< put all used node_modules modules in this chunk
-          name: "vendor", ///< name of bundle
-          chunks: "all" ///< type of code to put in this bundle
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all"
         }
       }
-    }
+    },
+    minimizer: [
+      new UglifyJSPlugin({
+        uglifyOptions: {
+          sourceMap: true,
+          compress: {
+            drop_console: true,
+            conditionals: true,
+            unused: true,
+            comparisons: true,
+            dead_code: true,
+            if_return: true,
+            join_vars: true
+          },
+          output: {
+            comments: false
+          }
+        }
+      })
+    ]
   }
-};
+}
