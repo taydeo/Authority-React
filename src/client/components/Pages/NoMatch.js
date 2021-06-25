@@ -1,7 +1,7 @@
 import React from 'react';
 import Body from '../Structure/Body';
 
-export default function NotFound(props) {
+export default function NoMatch(props) {
     return (
         <Body>
             <br/>

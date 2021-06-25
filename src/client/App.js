@@ -27,9 +27,7 @@ export default function App(props){
 
   return (
     <Router>
-      <Switch>
-        <Routes/>
-      </Switch>
+      <Routes/>
     </Router>
   );
 }

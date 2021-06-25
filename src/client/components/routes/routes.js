@@ -1,5 +1,5 @@
 import React, { Component, Suspense, lazy } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 /** 
  * Import all page components here.
@@ -8,34 +8,57 @@ const Index = lazy(() => import('../Index/Index'));
 const Register = lazy(() => import('../Pages/Register'));
 const Login = lazy(() => import('../Pages/Login'));
 const EditProfile = lazy(() => import('../Pages/EditProfile'));
+import NoMatch from '../Pages/NoMatch';
 import Loading from '../Misc/Loading';
 import Politician from '../Pages/Politician';
+
 
 class Routes extends Component{
     render(){
         return(
-            <>
-            <Suspense fallback={<Loading/>}>
+            <Switch>
+                {/*Home Page*/}
                 <Route exact path="/">
-                    <Index/>
+                    <Suspense fallback={<Loading/>}>
+                        <Index/>
+                    </Suspense>
                 </Route>
-                <Route exact path="/register">
-                    <Register/>
+
+                {/*Register Page*/}
+                <Route path="/register">
+                    <Suspense fallback={<Loading/>}>
+                        <Register/>
+                    </Suspense>
                 </Route>
-                <Route exact path="/login">
-                    <Login/>
+
+                {/*Login Page*/}
+                <Route path="/login">
+                    <Suspense fallback={<Loading/>}>
+                        <Login/>
+                    </Suspense>
                 </Route>
+
+                {/*Edit Profile Page*/}
                 <Route path="/editprofile">
-                    <EditProfile/>
+                    <Suspense fallback={<Loading/>}>
+                        <EditProfile/>
+                    </Suspense>
                 </Route>
-            </Suspense>
-            <Route exact path="/politician">
+
+                {/*Politician Pages*/}
+                <Route exact path="/politician">
                     <Politician noRequestId={true}/>
-            </Route>
-            <Route path="/politician/:userId">
-                <Politician/>
-            </Route>
-            </>
+                </Route>
+                <Route path="/politician/:userId">
+                    <Politician/>
+                </Route>
+                
+            
+                {/*Not Found Route*/}
+                <Route path="*">
+                    <NoMatch/>
+                </Route>
+            </Switch>
         );
     }
 }
