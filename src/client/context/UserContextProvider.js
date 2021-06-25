@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { UserContext } from './UserContext';
 import AuthorizationService from '../service/AuthService';
 import Loading from '../components/Misc/Loading';
@@ -7,7 +6,6 @@ import Loading from '../components/Misc/Loading';
 export default function ContextProvider(props){
     const [sessionData, setSessionData] = useState({});
     const [playerData, setPlayerData] = useState({});
-    const [alert, setAlert] = useState(null);
     const [loading, setLoading] = useState(true);
 
 
@@ -15,21 +13,26 @@ export default function ContextProvider(props){
         const fetchData = async ()=>{
             try{
                 const sessionDataX = await AuthorizationService.getSessionData();
-        
+                // IF they are logged in
                 if(sessionDataX.loggedIn){
                     var playerDataX = await AuthorizationService.getLoggedInData();
+                    // If they are logged in...but their player doesn't exist?
                     if(playerDataX.error){
+                        // Unset player data.
                         setPlayerData({});
                     }
                     else{
                         setPlayerData(playerDataX);
                     }
                 }
-                
+                // If they ARE logged in, and player doesn't exist.
                 if(sessionDataX.loggedIn && playerDataX.error){
+                    // Log them out :)
                     setSessionData(await AuthorizationService.logout());
                 }
-                setSessionData(sessionDataX);
+                else{
+                    setSessionData(sessionDataX);
+                }
                 if(loading){
                     setLoading(false);
                 }
@@ -37,14 +40,17 @@ export default function ContextProvider(props){
             catch(error){
                 console.log(error);
             }
-        };
+        }
+        // Fetch data first
+        fetchData();
+        // Then start an interval which happens every 10 seconds to refresh data.
         const id = setInterval(()=>{
             fetchData();
-        }, 10000);
-
-        fetchData();
-
-        return ()=>clearInterval(id);
+        },10000);
+        // Cleanup function.
+        return ()=>{
+            clearInterval(id);
+        }
     },[]);
     
 
@@ -59,9 +65,7 @@ export default function ContextProvider(props){
                 sessionData,
                 setSessionData,
                 playerData,
-                setPlayerData,
-                alert,
-                setAlert
+                setPlayerData
             }}>
             {props.children}
         </UserContext.Provider>

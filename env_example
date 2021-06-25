@@ -4,7 +4,6 @@ COOKIE_SECRET=(insert secret here, such as 'your mom')
 SESSION_SECURE=(true/false depending on https or http)
 ENVIRONMENT=DEVELOPMENT
 
-
 DB_HOST=(db host)
 DB_USER=(db user)
 DB_DB=(db name)

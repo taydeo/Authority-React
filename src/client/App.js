@@ -3,27 +3,28 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import Routes from './components/routes/routes.js';
-import { UserContext } from './context/UserContext.js';
+import { AlertContext } from './context/AlertContext'
 import { useAlert } from 'react-alert';
 
 
 export default function App(props){
-  const { alert, setAlert } = useContext(UserContext);
+  const { alert, setAlert, alertType, setAlertType } = useContext(AlertContext);
 
   const alertDialog = useAlert()
 
+  /*
+    Used for handling alerts.
+  */
   useEffect(()=>{
+    if(alertType == "") { setAlertType("error"); }
     if(alert != null){
       alertDialog.show(alert);
       setAlert(null);
     }
-
-    axios.get("/api/init").then(function(response){
-      if(response.status != 200){
-        console.log("Error intializing session vars.")
-      }
-    })
-  });
+    if(alertType != "error"){
+      setAlertType("error");
+    }
+  },[alert]);
 
   return (
     <Router>

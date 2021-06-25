@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import { withRouter } from 'react-router';
 import { UserContext } from '../../context/UserContext'
+import { AlertContext } from '../../context/AlertContext';
 import Body from '../Structure/Body';
 import firebase from '../../firebase/firebase';
 import AuthorizationService from '../../service/AuthService';
@@ -9,7 +10,8 @@ import MDEditor from '@uiw/react-md-editor';
 import '../../css/profile.css';
 
 function EditProfile(props){
-    const { setAlert, sessionData, playerData } = useContext(UserContext);
+    const { sessionData, playerData } = useContext(UserContext);
+    const { setAlert, setAlertType } = useContext(AlertContext);
     const [selectedFile, setSelectedFile] = useState(null);
     const [bioText, setBioText] = useState(`${playerData.bio}`);
 
@@ -28,16 +30,19 @@ function EditProfile(props){
         var uploadTask=storageRef.child(`userPics/${sessionData.loggedInId}`).put(file, {'cacheControl':'public,max-age=86400'});
         var url = await uploadTask.snapshot.ref.getDownloadURL()
         .then(async (url)=>{
+            console.log(url);
             var response = await AuthorizationService.updateUserPictureURL(url);
             if(response == "OK"){
+                setAlertType("success")
                 setAlert("Image successfully uploaded!");
             }
         });
     }
 
     const onBioSubmit = async function(){
-        var response = AuthorizationService.updateUserBio(bioText);
+        var response = await AuthorizationService.updateUserBio(bioText);
         if(response == "OK"){
+            setAlertType("success")
             setAlert("Biography successfully changed!");
         }
     }

@@ -1,13 +1,12 @@
-import axios from 'axios';
 import React, { Provider } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
-import { UserContext } from './context/UserContext.js';
 import UserContextProvider from './context/UserContextProvider';
 
 import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from './components/Structure/AlertTemplate';
+import AlertContextProvider from './context/AlertContextProvider';
 
 const options = {
     // you can also just use 'bottom center'
@@ -20,9 +19,11 @@ const options = {
   
 
 ReactDOM.render(
-    <AlertProvider template={AlertTemplate} {...options}>
-        <UserContextProvider>
-            <App />
-        </UserContextProvider>
-    </AlertProvider>, 
+    <AlertContextProvider>
+        <AlertProvider template={AlertTemplate} {...options}>
+            <UserContextProvider>
+                        <App />
+            </UserContextProvider>
+        </AlertProvider> 
+    </AlertContextProvider>,
 document.getElementById('root'));

@@ -2,13 +2,15 @@ import React, { useState, useContext, useEffect } from 'react';
 import Body from '../Structure/Body';
 import AuthorizationService from '../../service/AuthService';
 import { UserContext } from '../../context/UserContext';
+import { AlertContext } from '../../context/AlertContext';
 import { withRouter } from 'react-router';
 
 
 function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { sessionData, setSessionData, setPlayerData, setAlert } = useContext(UserContext);
+    const { sessionData, setSessionData, setPlayerData } = useContext(UserContext);
+    const { setAlert, setAlertType } = useContext(AlertContext);
 
     useEffect(()=>{
         if(sessionData.loggedIn){
@@ -23,10 +25,15 @@ function Login(props) {
             setSessionData(response.data)
             var loggedInData = await AuthorizationService.getLoggedInData();
             setPlayerData(loggedInData);
+
             props.history.push('/politician/'+loggedInData.id);
+
+            setAlert("Successfully logged in!");
+            setAlertType("success");
         }
         else{
             setAlert("Incorrect details uwu");
+            setAlertType("error");
         }
     }
 

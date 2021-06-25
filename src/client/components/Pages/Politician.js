@@ -8,7 +8,7 @@ import { timeAgoString } from '../../../server/classes/User/Method'
 import '../../css/profile.css';
 import ClipLoader from "react-spinners/ClipLoader";
 import { LinkContainer } from 'react-router-bootstrap'
-import { UserContext } from '../../context/UserContext'
+import { AlertContext } from '../../context/AlertContext';
 import { getPositionName, selectColor } from '../../../server/classes/Misc/Methods'
 import renderHTML from 'react-render-html';
 import MarkdownPreview from '@uiw/react-markdown-preview';
@@ -18,7 +18,7 @@ function Politician(props){
     var [loggedInUserIsUser, setLoggedInUserIsUser] = useState(false);
     var [loading, setLoading] = useState(true);
     var { userId } = useParams();
-    var { setAlert } = useContext(UserContext);
+    var { setAlert } = useContext(AlertContext);
     
 
     useEffect(()=>{
@@ -55,7 +55,6 @@ function Politician(props){
         }
         fetchData();
     },[])
-
     return(
         <Body middleColWidth='7'>
             {(!loading) ? (
@@ -80,7 +79,6 @@ function Politician(props){
                     style={{margin:'3px',fontFamily:"Bahnschrift"}}
                     source={politicianInfo.bio}/>
                 </pre>
-
                 <hr/>
             </div>
             <table className="table table-striped table-bordered" id='statsTable'>
