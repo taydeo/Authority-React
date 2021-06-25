@@ -2,6 +2,7 @@ const express = require('express');
 const logger = require('node-color-log');
 const path = require('path');
 const User = require('./classes/User');
+const axios = require('axios');
 const { setSessionDefaults } = require('./classes/Misc/setSessionDefaults');
 
 
@@ -30,16 +31,29 @@ catch(exception){
 
 const logOut = function(req) { req.session.playerData.loggedIn = false; req.session.playerData.loggedInId = 0; }
 
-app.get("/api/init",(req,res)=>{
+app.get("/api/init",async (req,res)=>{
     // Initialize session data
     if(req.session.playerData == null){
         setSessionDefaults(req);
     }
     //
-    if(User.userDoesExistId(req.session.playerData.loggedInId)){
-        User.updateLastOnline(req.session.playerData.loggedInId);
+    if(req.session.playerData.loggedIn){
+        let userDoesExist = await User.userDoesExistId(req.session.playerData.loggedInId).then((result)=>{return result;}).catch((err)=>console.log(err));
+        if(userDoesExist){
+            User.updateLastOnline(req.session.playerData.loggedInId);
+
+            const resp = await axios.get(`http://localhost:8080/api/userInfo/fetchUserById/${req.session.playerData.loggedInId}`)
+            .then((response)=>{return response})
+            .catch((err)=>res.send({error:"Logged in, but player does not exist."}));
+            if(resp != "Not Found"){
+                req.session.playerData.loggedInInfo = resp.data;
+            }
+
+        }
+        else{ 
+            logOut(req) 
+        }
     }
-    else{ logOut(req) }
     res.send(req.session.playerData);
 })
 

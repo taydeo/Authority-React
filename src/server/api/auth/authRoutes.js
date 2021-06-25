@@ -9,8 +9,10 @@ const requestIP = require('request-ip');
 router.get("/logout", function (req, res) {
     req.session.playerData.loggedIn = false;
     req.session.playerData.loggedInId = 0;
+    req.session.playerData.loggedInInfo = null;
+    req.session.playerData.admin = 0;
 
-    res.send(req.session);
+    res.send(req.session.playerData);
 })
 
 router.post("/login", function (req, res) {

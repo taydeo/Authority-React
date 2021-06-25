@@ -9,11 +9,13 @@ import '../../css/profile.css';
 import ClipLoader from "react-spinners/ClipLoader";
 import { LinkContainer } from 'react-router-bootstrap'
 import { AlertContext } from '../../context/AlertContext';
+import { UserContext } from '../../context/UserContext'
 import { getPositionName, selectColor } from '../../../server/classes/Misc/Methods'
 import renderHTML from 'react-render-html';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
 function Politician(props){
+    var { sessionData } = useContext(UserContext);
     var [politicianInfo, setPoliticianInfo] = useState({});
     var [loggedInUserIsUser, setLoggedInUserIsUser] = useState(false);
     var [loading, setLoading] = useState(true);
@@ -55,7 +57,7 @@ function Politician(props){
             }
         }
         fetchData();
-    },[props.match.params.userId])
+    },[props.match.params.userId, sessionData])
     return(
         <Body middleColWidth='7'>
             {(!loading) ? (

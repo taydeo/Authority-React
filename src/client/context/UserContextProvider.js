@@ -1,38 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from './UserContext';
 import AuthorizationService from '../service/AuthService';
 import Loading from '../components/Misc/Loading';
+import { AlertContext } from './AlertContext';
 
 export default function ContextProvider(props){
     const [sessionData, setSessionData] = useState({});
     const [playerData, setPlayerData] = useState({});
     const [loading, setLoading] = useState(true);
 
+    const { setAlert } = useContext(AlertContext);
 
     useEffect(() => {
         const fetchData = async ()=>{
             try{
                 const sessionDataX = await AuthorizationService.getSessionData();
-                // IF they are logged in
+                var setSessionDataTo = {};
                 if(sessionDataX.loggedIn){
-                    var playerDataX = await AuthorizationService.getLoggedInData();
-                    // If they are logged in...but their player doesn't exist?
-                    if(playerDataX.error){
-                        // Unset player data.
-                        setPlayerData({});
+                    if(sessionDataX.hasOwnProperty('loggedInInfo')){
+                        setPlayerData(sessionDataX.loggedInInfo);
                     }
                     else{
-                        setPlayerData(playerDataX);
+                        setPlayerData(await AuthorizationService.getLoggedInData());
+                    }
+                    if(playerData.hasOwnProperty("error")){
+                        console.log(playerData);
+                       // Error fetching player data, so lets invalidate the session.
+                       setPlayerData({});
+                       setAlert("There was an error fetching your account..please contact an administrator.");
+                       setSessionDataTo = await AuthorizationService.logout();
+                    }
+                    else{
+                        setSessionDataTo = sessionDataX;
                     }
                 }
-                // If they ARE logged in, and player doesn't exist.
-                if(sessionDataX.loggedIn && playerDataX.error){
-                    // Log them out :)
-                    setSessionData(await AuthorizationService.logout());
-                }
                 else{
-                    setSessionData(sessionDataX);
+                    // If they are logged out but still somehow have player data, invalidate it.
+                    if(playerData != {}){
+                        setPlayerData({});
+                    }
+                    setSessionDataTo = sessionDataX;
                 }
+                setSessionData(setSessionDataTo)
+
+                // Set loading to false to remove loading screen.
                 if(loading){
                     setLoading(false);
                 }
