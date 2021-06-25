@@ -17,6 +17,7 @@ export default function ContextProvider(props){
                 const sessionDataX = await AuthorizationService.getSessionData();
                 var setSessionDataTo = {};
                 if(sessionDataX.loggedIn){
+                    // If logged in information is attached to the session, set player data to it to prevent having to hit API twice.
                     if(sessionDataX.hasOwnProperty('loggedInInfo')){
                         setPlayerData(sessionDataX.loggedInInfo);
                     }

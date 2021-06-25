@@ -29,26 +29,36 @@ function Politician(props){
             var requestedUserInfo = {};
             var userExists = false;
             var sessionData = await AuthorizationService.getSessionData();
+            // If the URL has no politician ID 
             if(props.noRequestId){
+                // If they're logged in, then just send them their own page.
                 if(sessionData.loggedIn){
                     requestedUserInfo = await AuthorizationService.getUserData(sessionData.loggedInId,true,true);
+                    // User exists if requested data exists.
                     userExists = !(requestedUserInfo == undefined)
                 }
+                // If they're not, don't worry. There's a check later on.
             }
-            else{            
+            else{      
+                // If they requested a specific ID, then get that politician.     (true, true requests additional state/party info.)      
                 requestedUserInfo = await AuthorizationService.getUserData(userId,true,true);
+                // User exists if requested data exists.
                 userExists = !(requestedUserInfo == undefined || requestedUserInfo == "404")
             }
+            // If user doesn't exist
             if(!userExists){
+                // If they are logged in, send them to their own page.
                 if(sessionData.loggedIn){ 
                     props.history.push(`/politician`); 
                     setAlert("Politician not found.");
                 }
+                // If they aren't, then send them to the index and spit out an alert.
                 else{ 
                     props.history.push(`/`) 
                     setAlert("Politician not found.");
                 };
             }
+            // If they do, then update the state and title. Remove loading screen.
             else{
                 setPoliticianInfo(requestedUserInfo);
                 if(sessionData.loggedInId == requestedUserInfo.id){ setLoggedInUserIsUser(true); }
@@ -57,7 +67,8 @@ function Politician(props){
             }
         }
         fetchData();
-    },[props.match.params.userId, sessionData])
+        // Update if ID changes, or if current user logs out.
+    },[props.match.params.userId, sessionData.loggedIn])
     return(
         <Body middleColWidth='7'>
             {(!loading) ? (
