@@ -6,8 +6,13 @@ import Body from '../Structure/Body';
 import firebase from '../../firebase/firebase';
 import AuthorizationService from '../../service/AuthService';
 import MDEditor from '@uiw/react-md-editor';
+import Editor from "rich-markdown-editor";
+import light from '../Misc/EditorTheme';
 
 import '../../css/profile.css';
+
+
+
 
 function EditProfile(props){
     const { sessionData, playerData } = useContext(UserContext);
@@ -86,10 +91,12 @@ function EditProfile(props){
             <hr/>
             <h4>Change Bio</h4>
             <hr/>
-            <MDEditor
-                value={playerData.bio}
-                onChange={setBioText}
-            />
+            <div spellCheck="false" style={{overflow:'auto',margin:'15px',backgroundColor:'rgba(240,240,240,0.77)',textAlign:"left",minHeight:'30vh'}} className='container'>
+                <Editor 
+                theme={light}
+                onChange={(value)=>setBioText(value())}
+                defaultValue={playerData.bio}/>
+            </div>
             <br/>
             <button onClick={onBioSubmit} className='btn btn-primary'>Change Biography</button>
 

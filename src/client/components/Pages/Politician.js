@@ -12,7 +12,8 @@ import { AlertContext } from '../../context/AlertContext';
 import { UserContext } from '../../context/UserContext'
 import { getPositionName, selectColor } from '../../../server/classes/Misc/Methods'
 import renderHTML from 'react-render-html';
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import Editor from "rich-markdown-editor";
+import editorTheme from '../Misc/EditorTheme';
 
 function Politician(props){
     var { sessionData } = useContext(UserContext);
@@ -88,10 +89,11 @@ function Politician(props){
 
                 <hr/>
                 <h4>Biography and Details</h4>
-                <pre className="bioBox" style={{padding:'10px',maxHeight:"25vh",overflow:"auto",backgroundColor:'rgba(240,240,240,0.77)'}}>
-                    <MarkdownPreview
-                    style={{margin:'3px',fontFamily:"Bahnschrift"}}
-                    source={politicianInfo.bio}/>
+                <pre className="bioBox" style={{padding:'10px',maxHeight:"30vh",overflow:"auto",backgroundColor:'rgba(240,240,240,0.77)'}}>
+                    <Editor
+                    readOnly={true}
+                    theme={editorTheme}
+                    defaultValue={politicianInfo.bio}/>
                 </pre>
                 <hr/>
             </div>
