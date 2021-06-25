@@ -1,19 +1,20 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { useParams } from 'react-router-dom'
-import AuthorizationService from '../../service/AuthService'
-import Body from '../Structure/Body'
+import React, { useContext, useEffect, useState } from 'react'
 import NumberFormat from 'react-number-format'
+import renderHTML from 'react-render-html'
 import { withRouter } from 'react-router'
-import { timeAgoString } from '../../../server/classes/User/Method'
-import '../../css/profile.css';
-import ClipLoader from "react-spinners/ClipLoader";
 import { LinkContainer } from 'react-router-bootstrap'
-import { AlertContext } from '../../context/AlertContext';
-import { UserContext } from '../../context/UserContext'
+import { useParams } from 'react-router-dom'
+import ClipLoader from "react-spinners/ClipLoader"
+import Editor from "rich-markdown-editor"
 import { getPositionName, selectColor } from '../../../server/classes/Misc/Methods'
-import renderHTML from 'react-render-html';
-import Editor from "rich-markdown-editor";
-import editorTheme from '../Misc/EditorTheme';
+import { timeAgoString } from '../../../server/classes/User/Method'
+import { AlertContext } from '../../context/AlertContext'
+import { UserContext } from '../../context/UserContext'
+import '../../css/profile.css'
+import AuthorizationService from '../../service/AuthService'
+import editorTheme from '../Misc/EditorTheme'
+import Body from '../Structure/Body'
+import { Resizable } from 're-resizable'
 
 function Politician(props){
     var { sessionData } = useContext(UserContext);
@@ -89,12 +90,18 @@ function Politician(props){
 
                 <hr/>
                 <h4>Biography and Details</h4>
-                <pre className="bioBox" style={{padding:'10px',maxHeight:"30vh",overflow:"auto",backgroundColor:'rgba(240,240,240,0.77)'}}>
+
+                <Resizable style={{margin:"auto",padding:'10px',backgroundColor:'rgba(240,240,240,0.77)'}}
+                enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:true, bottomLeft:false, topLeft:false }}
+                
+                >
+                <pre className="bioBox" >
                     <Editor
                     readOnly={true}
                     theme={editorTheme}
                     defaultValue={politicianInfo.bio}/>
                 </pre>
+                </Resizable>
                 <hr/>
             </div>
             <table className="table table-striped table-bordered" id='statsTable'>
