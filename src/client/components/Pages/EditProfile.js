@@ -1,15 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
-import { UserContext } from '../../context/UserContext'
+import Editor from "rich-markdown-editor";
 import { AlertContext } from '../../context/AlertContext';
-import Body from '../Structure/Body';
+import { UserContext } from '../../context/UserContext';
+import '../../css/profile.css';
 import firebase from '../../firebase/firebase';
 import AuthorizationService from '../../service/AuthService';
-import MDEditor from '@uiw/react-md-editor';
-import Editor from "rich-markdown-editor";
 import light from '../Misc/EditorTheme';
+import Body from '../Structure/Body';
 
-import '../../css/profile.css';
 
 
 
