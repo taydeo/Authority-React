@@ -91,7 +91,7 @@ function Politician(props){
                 <hr/>
                 <h4>Biography and Details</h4>
 
-                <Resizable style={{margin:"auto",padding:'10px',backgroundColor:'rgba(240,240,240,0.77)'}}
+                <Resizable style={{overflow:'auto',overflowX:"hidden",margin:"auto",padding:'10px',backgroundColor:'rgba(240,240,240,0.77)'}} maxHeight={'50vh'}
                 enable={{ top:false, right:false, bottom:true, left:false, topRight:false, bottomRight:true, bottomLeft:false, topLeft:false }}
                 
                 >
