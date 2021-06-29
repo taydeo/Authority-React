@@ -8,6 +8,7 @@ const Index = lazy(() => import('../Index/Index'));
 const Register = lazy(() => import('../Pages/Register'));
 const Login = lazy(() => import('../Pages/Login'));
 const EditProfile = lazy(() => import('../Pages/EditProfile'));
+import Party from '../Pages/Party';
 import NoMatch from '../Pages/NoMatch';
 import Loading from '../Misc/Loading';
 import Politician from '../Pages/Politician';
@@ -51,6 +52,9 @@ class Routes extends Component{
                 </Route>
                 <Route path="/politician/:userId">
                     <Politician/>
+                </Route>
+                <Route path={["/party/:partyId","/party"]}>
+                    <Party/>
                 </Route>
                 
             

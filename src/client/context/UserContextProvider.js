@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from './UserContext';
-import AuthorizationService from '../service/AuthService';
+import React, { useContext, useEffect, useState } from 'react';
 import Loading from '../components/Misc/Loading';
+import AuthorizationService from '../service/AuthService';
 import { AlertContext } from './AlertContext';
+import { UserContext } from './UserContext';
 
 export default function ContextProvider(props){
     const [sessionData, setSessionData] = useState({});

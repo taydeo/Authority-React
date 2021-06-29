@@ -1,21 +1,26 @@
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CleanWebPackPlugin = require('clean-webpack-plugin');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const CompressionPlugin = require("compression-webpack-plugin");
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const webpack = require('webpack');
+const CompressionPlugin = require('compression-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const { jsonBeautify } = require('beautify-json');
+
 
 const outputDirectory = 'dist';
 
-module.exports = {
-  mode:"production",
-  entry:{
-    main:['babel-polyfill','./src/client/index.js']
-  },
+let config = {
   output: {
-    publicPath:"/",
-    path: path.join(__dirname, outputDirectory),
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, outputDirectory),
+    publicPath: '/',
+    filename: 'bundle.js',
+  },
+  resolve: {
+    modules: [path.join(__dirname, 'src'), 'node_modules'],
+    alias: {
+      react: path.join(__dirname, 'node_modules', 'react'),
+    },
   },
   module: {
     rules: [
@@ -23,12 +28,37 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+        ],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'less-loader',
+          },
+        ],
+      },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -45,58 +75,75 @@ module.exports = {
           outputPath: '/fonts/'
         }
       }
-    ]
-  },
-  resolve: {
-    extensions: ['*', '.js', '.jsx']
-  },
-  devServer: {
-    port: 3000,
-    open: true,
-    historyApiFallback: true,
-    proxy: {
-      '/api': 'http://localhost:8080'
-    }
+    ],
   },
   plugins: [
-    new CleanWebpackPlugin([outputDirectory]),
-    new HtmlWebpackPlugin({
-      inject:true,
+    new HtmlWebPackPlugin({
       template: './public/index.html',
-      favicon: './public/favicon.ico'
+      favicon: './public/favicon.ico',
     }),
-    new CompressionPlugin(),
-    //new BundleAnalyzerPlugin()
   ],
-  optimization: { 
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all"
-        }
-      }
-    },
-    minimizer: [
-      new UglifyJSPlugin({
-        uglifyOptions: {
-          sourceMap: true,
-          compress: {
-            drop_console: true,
-            conditionals: true,
-            unused: true,
-            comparisons: true,
-            dead_code: true,
-            if_return: true,
-            join_vars: true
-          },
-          output: {
-            comments: false
-          }
-        }
-      })
-    ]
+};
+
+module.exports = (env, argv) => {
+  config.mode = argv.mode;
+  if (argv.mode === 'development') {
+    config.entry = ['babel-polyfill', './src/client'];
+    config.devtool = 'inline-source-map';
+    config.resolve.alias['react-dom'] = '@hot-loader/react-dom';
+    config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    config.devServer = {
+      compress: true,
+      hot: true,
+      open: true,
+      port:3000,
+      proxy:{
+        '/api':'http://localhost:8080'
+      },
+      contentBase: `./${outputDirectory}`,
+      historyApiFallback: true, //For react router
+    };
   }
-}
+
+  if (argv.mode === 'production') {
+    config.entry = ['babel-polyfill','./src/client'];
+    config.devtool = 'source-map';
+    config.output.filename = '[name].[chunkhash].bundle.js';
+    config.output.chunkFilename = '[name].[chunkhash].bundle.js';
+    config.optimization = {
+      moduleIds: 'hashed',
+      runtimeChunk: {
+        name: 'manifest',
+      },
+      splitChunks: {
+        cacheGroups: {
+          vendors: {
+            test: /node_modules\/(?!antd\/).*/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+          // This can be your own design library.
+          antd: {
+            test: /node_modules\/(antd\/).*/,
+            name: 'antd',
+            chunks: 'all',
+          },
+        },
+      },
+    };
+    config.plugins.push(
+      new CompressionPlugin({
+        test: /\.js(\?.*)?$/i,
+      }),
+      new CleanWebPackPlugin([outputDirectory])
+    );
+    config.performance = {
+      hints: 'warning',
+      // Calculates sizes of gziped bundles.
+      assetFilter: function (assetFilename) {
+        return assetFilename.endsWith('.js.gz');
+      },
+    };
+  }
+  return config;
+};
