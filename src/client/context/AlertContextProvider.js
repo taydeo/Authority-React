@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { AlertContext } from './AlertContext';
+import React, { useState } from "react";
+import { AlertContext } from "./AlertContext";
 
-export default function AlertContextProvider(props){
+export default function AlertContextProvider(props) {
+  const [alert, setAlert] = useState(null);
+  const [alertType, setAlertType] = useState("");
 
-    const [alert, setAlert] = useState(null);
-    const [alertType, setAlertType] = useState("");
-    
-    return (
-        <AlertContext.Provider value = {{ alert,setAlert, alertType,setAlertType }}>
-            {props.children}
-        </AlertContext.Provider>
-    )    
+  return (
+    <AlertContext.Provider value={{ alert, setAlert, alertType, setAlertType }}>
+      {props.children}
+    </AlertContext.Provider>
+  );
 }

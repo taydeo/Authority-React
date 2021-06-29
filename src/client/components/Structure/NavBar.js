@@ -31,7 +31,7 @@ function NavBar(props) {
                                         <i className="fas fa-user" aria-hidden="true"></i> {playerData.politicianName}
                                     </a>
                                     <ul className="dropdown-menu">
-                                        <LinkContainer to={"/politician/"+playerData.id}>
+                                        <LinkContainer to="/politician">
                                             <a className="dropdown-item" href="#">Profile</a>
                                         </LinkContainer>
                                         <LinkContainer to={"/editprofile"}>
