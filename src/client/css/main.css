@@ -23,6 +23,10 @@ a{
     background-color: rgba(255,255,255,1);
     margin: auto;
 }
+.partyButton{
+    margin-left:3px;
+}
+
 .footerBar{
     font-family: "Source Sans Pro", 'sans-serif';
     font-size: 15px;

@@ -18,14 +18,15 @@ const public_information = function (userRow) {
 }
 
 router.get('/getLoggedInUser/:fetchParty?/:fetchState?/:sensitive?', async function (req, res) {
-    if(req.params.fetchParty === undefined){ var fetchParty = true; } else { var fetchParty = boolean(req.params.fetchParty);}
-    if(req.params.fetchState === undefined){ var fetchState = true; } else { var fetchState = boolean(req.params.fetchState);}
-    if(req.params.sensitive === undefined){ var sensitive = false; } else { var sensitive = boolean(req.params.sensitive);}
+    var fetchParty = ( req.params.fetchParty === undefined ? true : boolean(req.params.fetchParty) );
+    var fetchState = ( req.params.fetchState === undefined ? true : boolean(req.params.fetchState) );
+    var sensitive = ( req.params.sensitive === undefined ? false : boolean(req.params.sensitive) );
 
     if (req.session.playerData != null && req.session.playerData.loggedIn) {
         var user = new User(req.session.playerData.loggedInId);
         var userInfo = await user.fetchUserInfo().then((response) => {return response[0]}).catch(error=>{return undefined});
 
+        // If requested user exists.
         if(userInfo){
             if (userInfo.party != 0) {
                 var party = new Party(userInfo.party);
