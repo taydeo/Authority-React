@@ -15,7 +15,7 @@ class StateService {
   getStateOwner(state) {
     return this.auth
       .get("/stateinfo/getStateOwner/" + state)
-      .then((response) => {response.data});
+      .then((response) => response.data);
   }
 }
 const StateInfoService = new StateService();
