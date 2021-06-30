@@ -42,7 +42,7 @@ app.get("/api/init",async (req,res)=>{
         if(userDoesExist){
             User.updateLastOnline(req.session.playerData.loggedInId);
 
-            const resp = await axios.get(`http://localhost:8080/api/userInfo/fetchUserById/${req.session.playerData.loggedInId}`)
+            const resp = await axios.get(`http://localhost:8080/api/userInfo/fetchUserById/${req.session.playerData.loggedInId}/true`)
             .then((response)=>{return response})
             .catch((err)=>res.send({error:"Logged in, but player does not exist."}));
             if(resp != "Not Found"){

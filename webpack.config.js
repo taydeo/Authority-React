@@ -17,6 +17,7 @@ let config = {
     filename: 'bundle.js',
   },
   resolve: {
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
     modules: [path.join(__dirname, 'src'), 'node_modules'],
     alias: {
       react: path.join(__dirname, 'node_modules', 'react'),
@@ -90,7 +91,6 @@ module.exports = (env, argv) => {
   if (argv.mode === 'development') {
     config.entry = ['babel-polyfill', './src/client'];
     config.devtool = 'inline-source-map';
-    config.resolve.alias['react-dom'] = '@hot-loader/react-dom';
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
     config.devServer = {
       compress: true,

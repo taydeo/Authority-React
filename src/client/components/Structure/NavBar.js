@@ -54,8 +54,12 @@ function NavBar(props) {
                                             <i className="fas fa-handshake" aria-hidden="true"></i> {playerData.partyInfo.name}
                                         </a>
                                         <ul className="dropdown-menu">
-                                            <a className="dropdown-item" href={"party/"+playerData.partyInfo.id+"/overview"}>Overview</a>
-                                            <a className="dropdown-item" href={"party/"+playerData.partyInfo.id+"/members"}>Members</a>
+                                            <LinkContainer to={`/party/${playerData.party}/overview`}>
+                                                <a className="dropdown-item">Overview</a>
+                                            </LinkContainer>
+                                            <LinkContainer to={`/party/${playerData.party}/members`}>
+                                            <a className="dropdown-item">Members</a>
+                                            </LinkContainer>
                                             {
                                             (
                                                 userHasPerm(playerData.id,playerData.partyInfo,"sendFunds") || 
