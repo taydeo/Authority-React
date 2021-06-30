@@ -13,6 +13,7 @@ function EditProfile(props) {
   const { sessionData, playerData } = useContext(UserContext);
   const { setAlert, setAlertType } = useContext(AlertContext);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [ bioText, setBioText ] = useState("");
 
   const onImageChange = function (e) {
     if (e.target.files[0]) {
