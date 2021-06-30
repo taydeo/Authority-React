@@ -23,6 +23,10 @@ function NavBar(props) {
             AUTHORITY<small>It's Not POWER, I Swear!</small>
           </b>
         </a>
+        <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#myNavbar" aria-expanded="true">
+          <span className="sr-only"></span>
+          <span className="navbar-toggler-icon"></span>
+        </button>
         <div className="container-fluid">
           <div className="collapse navbar-collapse" id="myNavbar">
             <ul className="nav navbar-nav navbar-right">
