@@ -108,9 +108,8 @@ router.post("/setUserBio", function (req, res) {
   if (req.session.playerData) {
     if (req.session.playerData.loggedIn) {
       if (req.body.bio.length < 1000) {
-        let newBio = req.body.bio.replace(/\n{3,}/g, "\n");
         let db = require("../../db");
-        var sql = `UPDATE users SET bio=${db.escape(newBio)} WHERE id=${
+        var sql = `UPDATE users SET bio=${db.escape(req.body.bio)} WHERE id=${
           req.session.playerData.loggedInId
         }`;
         db.query(sql, function (err, response) {

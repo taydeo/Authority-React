@@ -10,7 +10,7 @@ import light from "../Misc/EditorTheme";
 import Body from "../Structure/Body";
 
 function EditProfile(props) {
-  const { sessionData, playerData } = useContext(UserContext);
+  const { sessionData, playerData, refresh, setRefresh } = useContext(UserContext);
   const { setAlert, setAlertType } = useContext(AlertContext);
   const [selectedFile, setSelectedFile] = useState(null);
   const [ bioText, setBioText ] = useState("");
@@ -46,6 +46,7 @@ function EditProfile(props) {
     if (response == "OK") {
       setAlert("Biography successfully changed!");
       setAlertType("success");
+      setRefresh(refresh+1);
     }
   };
 
@@ -54,7 +55,7 @@ function EditProfile(props) {
       props.history.push("/");
       setAlert("Not logged in.");
     }
-  });
+  },[]);
 
   return (
     <Body middleColWidth="7">

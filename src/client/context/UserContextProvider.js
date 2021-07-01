@@ -8,6 +8,7 @@ export default function ContextProvider(props) {
   const [sessionData, setSessionData] = useState({});
   const [playerData, setPlayerData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   const { setAlert } = useContext(AlertContext);
 
@@ -61,7 +62,7 @@ export default function ContextProvider(props) {
     return () => {
       clearInterval(id);
     };
-  }, []);
+  }, [refresh]);
 
   return (
     <>
@@ -74,6 +75,8 @@ export default function ContextProvider(props) {
             setSessionData,
             playerData,
             setPlayerData,
+            refresh,
+            setRefresh
           }}
         >
           {props.children}
