@@ -8,7 +8,7 @@ export default function ContextProvider(props) {
   const [sessionData, setSessionData] = useState({});
   const [playerData, setPlayerData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(0);
 
   const { setAlert } = useContext(AlertContext);
 

@@ -15,6 +15,13 @@ class PartyService {
       .then((response) => response.data)
       .catch((err) => "error");
   }
+  fetchRoleList(partyID){
+    let url = `/partyinfo/partyRoleList/${partyID}`;
+    return this.auth
+      .get(url)
+      .then((response)=>response.data)
+      .catch((err) => "error");
+  }
 }
 const PartyInfoService = new PartyService();
 export default PartyInfoService;

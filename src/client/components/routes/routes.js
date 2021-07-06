@@ -52,7 +52,7 @@ class Routes extends Component {
         <Route path="/politician/:userId">
           <Politician />
         </Route>
-        <Route path={["/party/:partyId", "/party"]}>
+        <Route path={["/party/:partyId/:mode?", "/party"]}>
           <Party />
         </Route>
 

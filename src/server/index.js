@@ -47,6 +47,7 @@ app.get("/api/init",async (req,res)=>{
             .catch((err)=>res.send({error:"Logged in, but player does not exist."}));
             if(resp != "Not Found"){
                 req.session.playerData.loggedInInfo = resp.data;
+                req.session.playerData.loggedInInfo.lastOnline = 0;
             }
 
         }
