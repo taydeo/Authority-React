@@ -12,7 +12,6 @@ const PartyOverview = React.memo(props=>{
     let [partyRoles, setPartyRoles] = useState();
     let [loading, setLoading] = useState({});
 
-
     useEffect(()=>{
         setPartyInfo(props.partyInfo);
         async function fetchData(){

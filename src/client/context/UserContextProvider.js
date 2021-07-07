@@ -3,50 +3,56 @@ import Loading from "../components/Misc/Loading";
 import AuthorizationService from "../service/AuthService";
 import { AlertContext } from "./AlertContext";
 import { UserContext } from "./UserContext";
+import WindowFocusHandler from "./WindowFocusHandler";
 
 export default function ContextProvider(props) {
   const [sessionData, setSessionData] = useState({});
   const [playerData, setPlayerData] = useState({});
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
+  const [isFocused, setFocus] = useState(true);
 
   const { setAlert } = useContext(AlertContext);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const sessionDataX = await AuthorizationService.getSessionData();
-        var setSessionDataTo = {};
-        if (sessionDataX.loggedIn) {
-          // If logged in information is attached to the session, set player data to it to prevent having to hit API twice.
-          if (sessionDataX.hasOwnProperty("loggedInInfo")) {
-            setPlayerData(sessionDataX.loggedInInfo);
+        if(isFocused){
+          const sessionDataX = await AuthorizationService.getSessionData();
+          var setSessionDataTo = {};
+          if (sessionDataX.loggedIn) {
+            // If logged in information is attached to the session, set player data to it to prevent having to hit API twice.
+            if (sessionDataX.hasOwnProperty("loggedInInfo")) {
+              setPlayerData(sessionDataX.loggedInInfo);
+            } else {
+              setPlayerData(await AuthorizationService.getLoggedInData());
+            }
+            if (playerData.hasOwnProperty("error")) {
+              console.log(playerData);
+              // Error fetching player data, so lets invalidate the session.
+              setPlayerData({});
+              setAlert(
+                "There was an error fetching your account..please contact an administrator."
+              );
+              setSessionDataTo = await AuthorizationService.logout();
+            } else {
+              setSessionDataTo = sessionDataX;
+            }
           } else {
-            setPlayerData(await AuthorizationService.getLoggedInData());
-          }
-          if (playerData.hasOwnProperty("error")) {
-            console.log(playerData);
-            // Error fetching player data, so lets invalidate the session.
-            setPlayerData({});
-            setAlert(
-              "There was an error fetching your account..please contact an administrator."
-            );
-            setSessionDataTo = await AuthorizationService.logout();
-          } else {
+            // If they are logged out but still somehow have player data, invalidate it.
+            if (playerData != {}) {
+              setPlayerData({});
+            }
             setSessionDataTo = sessionDataX;
           }
-        } else {
-          // If they are logged out but still somehow have player data, invalidate it.
-          if (playerData != {}) {
-            setPlayerData({});
-          }
-          setSessionDataTo = sessionDataX;
-        }
-        setSessionData(setSessionDataTo);
+          setSessionData(setSessionDataTo);
 
-        // Set loading to false to remove loading screen.
-        if (loading) {
-          setLoading(false);
+          // Set loading to false to remove loading screen.
+          if (loading) {
+            setLoading(false);
+          }
+        }
+        else{
+          console.debug("not focused. skipping check");
         }
       } catch (error) {
         console.log(error);
@@ -62,26 +68,37 @@ export default function ContextProvider(props) {
     return () => {
       clearInterval(id);
     };
-  }, [refresh]);
+  }, [refresh, isFocused]);
 
-  return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : (
-        <UserContext.Provider
-          value={{
-            sessionData,
-            setSessionData,
-            playerData,
-            setPlayerData,
-            refresh,
-            setRefresh
-          }}
-        >
-          {props.children}
-        </UserContext.Provider>
-      )}
-    </>
-  );
+
+
+  if(loading){
+    return(
+      <>
+      <Loading/>
+      <UserContext.Provider value={{isFocused, setFocus}}>
+        <WindowFocusHandler/>
+      </UserContext.Provider>
+      </>
+    )
+  }
+  else{
+    return(
+      <UserContext.Provider
+      value={{
+        sessionData,
+        setSessionData,
+        playerData,
+        setPlayerData,
+        refresh,
+        setRefresh,
+        isFocused,
+        setFocus
+      }}
+    >
+      <WindowFocusHandler/>
+      {props.children}
+    </UserContext.Provider>
+    )
+  }
 }
